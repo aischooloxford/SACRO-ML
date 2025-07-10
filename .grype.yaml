@@ -1,0 +1,117 @@
+# Grype Configuration for SACRO-ML
+# This file customizes vulnerability scanning behavior
+
+# Ignore specific vulnerabilities (examples - adjust as needed)
+ignore:
+  # Ignore vulnerabilities in test dependencies
+  - vulnerability: "*"
+    package:
+      name: pytest*
+      type: python
+
+  # Ignore low severity vulnerabilities in development dependencies
+  - vulnerability: "*"
+    severity: "Low"
+    package:
+      type: python
+      name: "*"
+    match:
+      - fixed-in: ""  # Only ignore if no fix is available
+
+# Configure output formatting
+output-template-file: ""
+
+# Configure package matching behavior
+match:
+  # Configure how packages are matched
+  java:
+    using-cpes: true
+  dotnet:
+    using-cpes: true
+  javascript:
+    using-cpes: false
+  python:
+    using-cpes: false
+  ruby:
+    using-cpes: false
+  go:
+    using-cpes: false
+
+# Configure package exclusions
+exclude:
+  # Exclude test files and directories
+  - "**/test/**"
+  - "**/tests/**"
+  - "**/*test*/**"
+  - "**/examples/**"
+  - "**/docs/**"
+  
+# Configure fail conditions
+fail-on-severity: "medium"
+
+# Configure registry settings
+registry:
+  # Configure package registry authentication if needed
+  insecure-skip-tls-verify: false
+  insecure-use-http: false
+
+# Configure database settings
+db:
+  # Automatically update vulnerability database
+  auto-update: true
+  # Cache directory (will use default if not specified)
+  # cache-dir: ~/.cache/grype/db
+  # Update available threshold
+  update-available-timeout: "125s"
+  # Maximum allowed age for database before requiring update
+  max-allowed-built-age: "120h"
+
+# Configure scanning behavior
+scan:
+  # Configure scope of scan
+  scope: "all-layers"  # Options: all-layers, squashed
+  
+# Configure package cataloging
+catalogers:
+  # Configure which catalogers to use
+  enabled:
+    - "alpm-cataloger"
+    - "apk-cataloger" 
+    - "binary-cataloger"
+    - "cargo-auditable-binary-cataloger"
+    - "conan-cataloger"
+    - "dart-cataloger"
+    - "dpkg-cataloger"
+    - "dotnet-cataloger"
+    - "elixir-cataloger"
+    - "erlang-cataloger"
+    - "go-cataloger"
+    - "gradle-cataloger"
+    - "java-cataloger"
+    - "javascript-cataloger"
+    - "nix-cataloger"
+    - "php-cataloger"
+    - "python-cataloger"
+    - "rpm-cataloger"
+    - "ruby-cataloger"
+    - "rust-cataloger"
+    - "swift-cataloger"
+
+# Configure logging
+log:
+  # Log level: trace, debug, info, warn, error, fatal, panic
+  level: "info"
+  # Output file for logs (use stdout if not specified)
+  # file: ""
+
+# Configure platform detection
+platform: ""  # Will auto-detect if not specified
+
+# Configure distro detection  
+distro: ""  # Will auto-detect if not specified, can override with specific distro
+
+# Configure additional search directories
+search:
+  # Additional directories to search for packages
+  unindexed-archives: false
+  indexed-archives: true
